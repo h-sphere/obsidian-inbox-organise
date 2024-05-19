@@ -86,7 +86,6 @@ export class SelectFileModal extends SuggestModal<Folder> {
 
 	// Perform action on the selected suggestion.
 	onChooseSuggestion(folder: Folder, evt: MouseEvent | KeyboardEvent) {
-		console.log('ON CHOOSE SUGGESTION')
 		new Notice(`Selected ${folder.title}`);
 		this.isResolved = true;
 		this.resolve(folder);

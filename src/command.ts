@@ -5,32 +5,26 @@ import { OrganiseCancelError } from "./errors";
 
 export class OrganiseCommand {
     async processInboxFiles() {
-		console.log('Processing inbox files')
 		
 		const inboxFolder = this.app.vault.getAbstractFileByPath(this.settings.inboxFolder);
-		console.log('Inbox Folder', inboxFolder);
 		if (!inboxFolder || !inboxFolder.children || inboxFolder.children.length === 0) {
 			new Notice("Nothing to Organise",1500)
 			return;
 		}
-		console.log(inboxFolder)
 
 		const files = inboxFolder.children.filter((file: TAbstractFile) => file instanceof TAbstractFile);
 
 		for (const file of files) {
 			try {
-				console.log(file.path)
 				await this.app.workspace.openLinkText(file.path, file.path);
 				// await sleep(1000)
 				const destination = await this.askForDestinationCustom(file);
-				console.log('got destination???', destination)
 				if (destination) {
 					await this.moveFile(file, destination.path);
 				}
 
 			} catch (e) {
 				if (e instanceof OrganiseCancelError) {
-					console.log('Cancelled')
 					break;
 				}
 			}
@@ -38,13 +32,6 @@ export class OrganiseCommand {
 	}
 
 	async askForDestinationCustom(file: TAbstractFile) {
-		// console.log('LINKZ', this.app.metadataCache.getFileCache(file).links)
-		// const links = this.app.metadataCache.getFileCache(file).links ?? [];
-		// const resolvedLinks = links.map((link) => {
-		// 	const resolvedPath = this.app.metadataCache.getFirstLinkpathDest(link.link, file.path);
-		// 	return resolvedPath
-		// });
-		// console.log('RESOLVED LINKS', resolvedLinks)
 		return new SelectFileModal(this.app, `Organising: ${file.name}`).open();
 	}
 
