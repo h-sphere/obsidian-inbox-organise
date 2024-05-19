@@ -1,11 +1,12 @@
 import { App, FileSystemAdapter, Notice, TAbstractFile } from "obsidian";
 import { SelectFileModal } from "./modal";
+import { DEFAULT_SETTINGS } from "./data";
 
 export class OrganiseCommand {
     async processInboxFiles() {
 		console.log('Processing inbox files')
 		
-		const inboxFolder = this.app.vault.getAbstractFileByPath('Inbox');
+		const inboxFolder = this.app.vault.getAbstractFileByPath(this.settings.inboxFolder);
 		console.log('Inbox Folder', inboxFolder);
 		if (!inboxFolder || !inboxFolder.children || inboxFolder.children.length === 0) {
 			new Notice("Nothing to Organise",1500)
@@ -28,13 +29,13 @@ export class OrganiseCommand {
 	}
 
 	async askForDestinationCustom(file: TAbstractFile) {
-		console.log('LINKZ', this.app.metadataCache.getFileCache(file).links)
-		const links = this.app.metadataCache.getFileCache(file).links ?? [];
-		const resolvedLinks = links.map((link) => {
-			const resolvedPath = this.app.metadataCache.getFirstLinkpathDest(link.link, file.path);
-			return resolvedPath
-		});
-		console.log('RESOLVED LINKS', resolvedLinks)
+		// console.log('LINKZ', this.app.metadataCache.getFileCache(file).links)
+		// const links = this.app.metadataCache.getFileCache(file).links ?? [];
+		// const resolvedLinks = links.map((link) => {
+		// 	const resolvedPath = this.app.metadataCache.getFirstLinkpathDest(link.link, file.path);
+		// 	return resolvedPath
+		// });
+		// console.log('RESOLVED LINKS', resolvedLinks)
 		return new SelectFileModal(this.app, `Organising: ${file.name}`).open();
 	}
 
@@ -44,7 +45,7 @@ export class OrganiseCommand {
 		await adapter.rename(file.path, newPath);
 	}
 
-    constructor(private readonly app: App) {
+    constructor(private readonly app: App, private readonly settings: typeof DEFAULT_SETTINGS) {
         this.processInboxFiles()
     }
 }
