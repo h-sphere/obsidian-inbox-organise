@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Obsidian Inbox Organise Plugin",
+  title: "Obsidian Inbox Organiser Plugin",
   description: "Plugin to organise files in the inbox folder of Obsidian.",
   base: '/sql-seal/',
   themeConfig: {

@@ -1,5 +1,5 @@
 {
-  "name": "inbox-organise",
+  "name": "inbox-organiser",
   "version": "0.1.0",
   "description": "A plugin to automatically organise your inbox",
   "main": "main.js",
