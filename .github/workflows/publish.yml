@@ -21,13 +21,6 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Recompile Better SQLite3 for Electron
-        run: |
-          npm run rebuild
-      - name: Copy better SQLite3 to plugin
-        run: |
-          cp -r node_modules/better-sqlite3/build/Release/better_sqlite3.node .
-
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
