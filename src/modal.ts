@@ -1,5 +1,6 @@
-import { App, Notice, SuggestModal, TAbstractFile, TFolder } from "obsidian";
+import { App, SuggestModal, TAbstractFile, TFolder, setIcon } from "obsidian";
 import { OrganiseCancelError } from "./errors";
+import { BUTTON_TEXT_CANCEL } from "./content";
 
 export interface Folder {
 	title: string;
@@ -13,12 +14,6 @@ export class SelectFileModal extends SuggestModal<Folder> {
 
 	// Returns all available suggestions.
 	getSuggestions(query: string): Folder[] {
-		if (query === '^ CANCEL') {
-			this.isResolved = true;
-			this.reject(new OrganiseCancelError());
-			this.close()
-		}
-
 		const folders: TAbstractFile[] = [];
 		
 		const vaultFolder = this.app.vault.getRoot()
@@ -52,10 +47,20 @@ export class SelectFileModal extends SuggestModal<Folder> {
 	onOpen(): void {
 		super.onOpen();
 		this.titleEl.setText(this.message);
-		this.containerEl
+		const container = this.containerEl
 			.find('.prompt')
-			.createEl('div', { text: this.message, prepend: true, cls: 'prompt-header' });
+			.createEl('div', { cls: 'prompt-header-container', prepend: true })
+		container.createEl('div', { text: this.message, cls: 'prompt-header' });
+		const btn = container.createEl('button', { cls: 'prompt-button', title: BUTTON_TEXT_CANCEL });
+		setIcon(btn, 'cross')
+		btn.onClickEvent(() => {
+			this.isResolved = true;
+			this.reject(new OrganiseCancelError());
+			this.close()
+		})
+		setTimeout(() => {
 		this.inputEl.focus();
+		});
 	}
 
 	onClose(): void {
@@ -86,7 +91,6 @@ export class SelectFileModal extends SuggestModal<Folder> {
 
 	// Perform action on the selected suggestion.
 	onChooseSuggestion(folder: Folder, evt: MouseEvent | KeyboardEvent) {
-		new Notice(`Selected ${folder.title}`);
 		this.isResolved = true;
 		this.resolve(folder);
 	}

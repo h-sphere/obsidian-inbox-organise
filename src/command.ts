@@ -1,4 +1,4 @@
-import { App, FileSystemAdapter, Notice, TAbstractFile } from "obsidian";
+import { App, FileSystemAdapter, Notice, TAbstractFile, TFolder } from "obsidian";
 import { SelectFileModal } from "./modal";
 import { DEFAULT_SETTINGS } from "./data";
 import { OrganiseCancelError } from "./errors";
@@ -16,6 +16,9 @@ export class OrganiseCommand {
 
 		for (const file of files) {
 			try {
+				if (file instanceof TFolder) {
+					continue;
+				}
 				await this.app.workspace.openLinkText(file.path, file.path);
 				// await sleep(1000)
 				const destination = await this.askForDestinationCustom(file);
@@ -32,7 +35,7 @@ export class OrganiseCommand {
 	}
 
 	async askForDestinationCustom(file: TAbstractFile) {
-		return new SelectFileModal(this.app, `Organising: ${file.name}`).open();
+		return new SelectFileModal(this.app, file.name).open();
 	}
 
 	async moveFile(file: TAbstractFile, destination: string) {

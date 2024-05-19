@@ -1,5 +1,18 @@
-.prompt-header {
+.prompt-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: var(--size-4-3);
     border-bottom: 1px solid var(--background-secondary);
+}
+
+.prompt-header {
+    font-size: var(--font-ui-medium);
+}
+
+.prompt-button {
+    padding: var(--size-4-3);
     font-size: var(--font-ui-large);
+    cursor: pointer;
+    background: transparent;
 }

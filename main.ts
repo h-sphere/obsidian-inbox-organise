@@ -1,11 +1,9 @@
-import { FuzzySuggestModal, Notice, Plugin, Setting } from 'obsidian';
-import { FileSystemAdapter, TAbstractFile } from 'obsidian';
+import { Plugin } from 'obsidian';
 import { OrganiseCommand } from 'src/command';
-import { SelectFileModal } from 'src/modal';
-import { PluginSettingTab } from 'obsidian';
 import { DEFAULT_SETTINGS } from 'src/data';
 import { App } from 'obsidian';
 import { InboxOrganiseSettingsTab } from 'src/settings';
+import { COMMAND_NAME } from 'src/content';
 
 
 
@@ -24,7 +22,7 @@ export default class InboxOrganisePlugin extends Plugin {
 
 		this.addCommand({
 			id: 'process-inbox-files',
-			name: 'Process Inbox Files',
+			name: COMMAND_NAME,
 			callback: () => new OrganiseCommand(this.app, this.settings),
 		});
 	}
