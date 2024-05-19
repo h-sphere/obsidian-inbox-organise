@@ -1,4 +1,4 @@
-import { Notice, SuggestModal, TAbstractFile, TFolder } from "obsidian";
+import { App, Notice, SuggestModal, TAbstractFile, TFolder } from "obsidian";
 
 export interface Folder {
 	title: string;
@@ -31,6 +31,7 @@ export class SelectFileModal extends SuggestModal<Folder> {
 			}
 		}
 		console.log('folders', folders)
+		// TODO: Implement a more sophisticated search algorithm. Fuzzy search, etc.		
 		const filteredFolders = folders.filter((folder) => {
 			const folderName = folder.path.toLowerCase();
 			const queryLower = query.toLowerCase();
