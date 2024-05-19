@@ -5,6 +5,7 @@ import { SelectFileModal } from 'src/modal';
 import { PluginSettingTab } from 'obsidian';
 import { DEFAULT_SETTINGS } from 'src/data';
 import { App } from 'obsidian';
+import { InboxOrganiseSettingsTab } from 'src/settings';
 
 
 
@@ -37,33 +38,5 @@ export default class InboxOrganisePlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
-	}
-}
-
-class InboxOrganiseSettingsTab extends PluginSettingTab {
-	plugin: InboxOrganisePlugin;
-
-	constructor(app: App, plugin: InboxOrganisePlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		let { containerEl } = this;
-
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName('Inbox Folder')
-			.setDesc('Specify the inbox folder')
-			.addText((text) =>
-				text
-					.setPlaceholder('Enter inbox folder')
-					.setValue(this.plugin.settings.inboxFolder)
-					.onChange(async (value) => {
-						this.plugin.settings.inboxFolder = value;
-						await this.plugin.saveSettings();
-					})
-			);
 	}
 }
