@@ -30,4 +30,4 @@ jobs:
           gh release create "$tag" \
             --title="$tag" \
             --draft \
-            main.js manifest.json styles.css better_sqlite3.node
+            main.js manifest.json styles.css
