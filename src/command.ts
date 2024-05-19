@@ -1,6 +1,7 @@
 import { App, FileSystemAdapter, Notice, TAbstractFile } from "obsidian";
 import { SelectFileModal } from "./modal";
 import { DEFAULT_SETTINGS } from "./data";
+import { OrganiseCancelError } from "./errors";
 
 export class OrganiseCommand {
     async processInboxFiles() {
@@ -17,13 +18,21 @@ export class OrganiseCommand {
 		const files = inboxFolder.children.filter((file: TAbstractFile) => file instanceof TAbstractFile);
 
 		for (const file of files) {
-			console.log(file.path)
-			await this.app.workspace.openLinkText(file.path, file.path);
-			// await sleep(1000)
-			const destination = await this.askForDestinationCustom(file);
-			console.log('got destination???', destination)
-			if (destination) {
-				await this.moveFile(file, destination.path);
+			try {
+				console.log(file.path)
+				await this.app.workspace.openLinkText(file.path, file.path);
+				// await sleep(1000)
+				const destination = await this.askForDestinationCustom(file);
+				console.log('got destination???', destination)
+				if (destination) {
+					await this.moveFile(file, destination.path);
+				}
+
+			} catch (e) {
+				if (e instanceof OrganiseCancelError) {
+					console.log('Cancelled')
+					break;
+				}
 			}
 		}
 	}

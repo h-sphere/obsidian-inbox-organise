@@ -1,4 +1,5 @@
 import { App, Notice, SuggestModal, TAbstractFile, TFolder } from "obsidian";
+import { OrganiseCancelError } from "./errors";
 
 export interface Folder {
 	title: string;
@@ -12,25 +13,24 @@ export class SelectFileModal extends SuggestModal<Folder> {
 
 	// Returns all available suggestions.
 	getSuggestions(query: string): Folder[] {
+		if (query === '^ CANCEL') {
+			this.isResolved = true;
+			this.reject(new OrganiseCancelError());
+			this.close()
+		}
+
 		const folders: TAbstractFile[] = [];
 		
 		const vaultFolder = this.app.vault.getRoot()
-		console.log('VAULT FOLDER', vaultFolder)
-
-		
-
 		if (vaultFolder && vaultFolder.children) {
 			for (const child of vaultFolder.children) {
-				console.log('CHILDREN', child)
 				if (child instanceof TFolder) {
-					console.log('i am folder', child)
 					folders.push(child);
 					const subfolders = child.children.filter((subfolder: TAbstractFile) => subfolder instanceof TFolder);
 					folders.push(...subfolders);
 				}
 			}
 		}
-		console.log('folders', folders)
 		// TODO: Implement a more sophisticated search algorithm. Fuzzy search, etc.		
 		const filteredFolders = folders.filter((folder) => {
 			const folderName = folder.path.toLowerCase();
@@ -62,7 +62,6 @@ export class SelectFileModal extends SuggestModal<Folder> {
 		// Pretty ugly hack to handle the case where the user closes the modal without selecting a suggestion.
 		setTimeout(() => {
 			if (!this.isResolved) {
-				console.log('ON CLOSE');
 				this.reject();
 			}
 		})
