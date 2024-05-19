@@ -1,0 +1,5 @@
+.prompt-header {
+    padding: var(--size-4-3);
+    border-bottom: 1px solid var(--background-secondary);
+    font-size: var(--font-ui-large);
+}
