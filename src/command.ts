@@ -1,4 +1,4 @@
-import { App, FileSystemAdapter, Notice, TAbstractFile, TFolder } from "obsidian";
+import { App, DataAdapter, Notice, TAbstractFile, TFolder } from "obsidian";
 import { SelectFileModal } from "./modal";
 import { DEFAULT_SETTINGS } from "./data";
 import { OrganiseCancelError } from "./errors";
@@ -39,7 +39,7 @@ export class OrganiseCommand {
 	}
 
 	async moveFile(file: TAbstractFile, destination: string) {
-		const adapter = this.app.vault.adapter as FileSystemAdapter;
+		const adapter: DataAdapter = this.app.vault.adapter
 		const newPath = `${destination}/${file.name}`;
 		await adapter.rename(file.path, newPath);
 	}
